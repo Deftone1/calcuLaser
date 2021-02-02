@@ -1,4 +1,3 @@
-
 // Calculator constructor and functions
 class Calculator {
   constructor(previousOperandTextElement, currentOperandTextElement) {
@@ -7,11 +6,14 @@ class Calculator {
     this.clear();
   }
   clear() {
-    this.currentOperand = "";
-    this.previousOperand = "";
+    this.currentOperand = ''
+    this.previousOperand = ''
+    this.operation = undefined
   }
 
-  delete() {}
+  delete() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+  }
 
   appendNumber(number) {
     if (number === "." && this.currentOperand.includes(".")) return;
@@ -54,9 +56,22 @@ class Calculator {
     this.previousOperand = "";
   }
 
+
+  getDisplayNumber(number) {
+      const floatNumber = parseFloat(number)
+      if (isNaN(floatNumber)) return ''
+      return floatNumber.toLocaleString('en')
+
+  }
+
+
   updateDisplay() {
-    this.currentOperandTextElement.innerText = this.currentOperand;
-    this.previousOperandTextElement.innerText = this.previousOperand;
+    this.currentOperandTextElement.innerText = 
+    this.getDisplayNumber(this.currentOperand)
+    if (this.operation != null) {
+      this.previousOperandTextElement.innerText = 
+      `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+    }
   }
 }
 
@@ -94,5 +109,15 @@ operationButtons.forEach((button) => {
 
 equalsButton.addEventListener("click", (button) => {
   calculator.compute();
+  calculator.updateDisplay();
+});
+
+allClearButton.addEventListener("click", (button) => {
+  calculator.clear();
+  calculator.updateDisplay();
+});
+
+deleteButton.addEventListener("click", (button) => {
+  calculator.delete();
   calculator.updateDisplay();
 });
