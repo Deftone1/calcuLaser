@@ -51,28 +51,45 @@ class Calculator {
       default:
         return;
     }
-    this.currentOperand = computation;
-    this.operation = undefined;
-    this.previousOperand = "";
+    this.currentOperand = computation
+    this.operation = undefined
+    this.previousOperand = ""
   }
+
 
 
   getDisplayNumber(number) {
-      const floatNumber = parseFloat(number)
-      if (isNaN(floatNumber)) return ''
-      return floatNumber.toLocaleString('en')
-
-  }
-
+      const stringNumber = number.toString()
+      const integerDigits = parseFloat(stringNumber.split('.')[0])
+      const decimalDigits = stringNumber.split('.')[1]
+      let integerDisplay
+      if (isNaN(integerDigits)) {
+          integerDisplay = ''
+      } else {
+          integerDisplay = integerDigits.toLocaleString('en', {
+              maximumFractionDigits: 0 })
+          }
+          if (decimalDigits != null) {
+              return `${integerDisplay}.${decimalDigits}`
+          } else {
+              return integerDisplay
+          }
+      }
+      
+    
+  
 
   updateDisplay() {
     this.currentOperandTextElement.innerText = 
     this.getDisplayNumber(this.currentOperand)
     if (this.operation != null) {
       this.previousOperandTextElement.innerText = 
-      `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+      `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
+    } else {
+        this.previousOperandTextElement.innerText = ''
     }
   }
+
 }
 
 const numberButtons = document.querySelectorAll("[data-number]");
@@ -93,10 +110,19 @@ const calculator = new Calculator(
 );
 
 // Event Listeners for Calculator Buttons
+
+// button.addEventListener("click", () => {
+//     var snd = new Audio('laser-gun-19sf.mp3')
+//     snd.play()
+// })
+
+
 numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
     calculator.appendNumber(button.innerText);
     calculator.updateDisplay();
+    var snd = new Audio('laser-gun-19sf.mp3')
+    snd.play()
   });
 });
 
@@ -104,20 +130,28 @@ operationButtons.forEach((button) => {
   button.addEventListener("click", () => {
     calculator.chooseOperation(button.innerText);
     calculator.updateDisplay();
+    var snd = new Audio('heat-vision.mp3')
+    snd.play()
   });
 });
 
 equalsButton.addEventListener("click", (button) => {
   calculator.compute();
   calculator.updateDisplay();
+  var snd = new Audio('sf_desintegration.mp3')
+    snd.play()
 });
 
 allClearButton.addEventListener("click", (button) => {
   calculator.clear();
   calculator.updateDisplay();
+  var snd = new Audio('sf_laser_explosion.mp3')
+    snd.play()
 });
 
 deleteButton.addEventListener("click", (button) => {
   calculator.delete();
   calculator.updateDisplay();
+  var snd = new Audio('sf_laser_explosion.mp3')
+    snd.play()
 });
